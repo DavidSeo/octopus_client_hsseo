@@ -242,17 +242,16 @@ export class CDBusInterface {
     _onResponse(aCb: (aData: any) => void) {
         this._onResponseCb = aCb;
     }
-    _call(aName: string, ...aArgs: any[]) {
+
+    _call(aName: string, aType: string, ...aArgs: any[]) {
         var callback = aArgs.pop();
         this._onResponse(callback);
         this._dbusMsg.clearArgs();
-        aArgs.forEach((arg) => {
-            if (typeof arg == 'string') {
-                this._dbusMsg.appendArgs('s', arg);
-            } else {
-                this._dbusMsg.appendArgs('i', arg);
-            }
-        });
+
+        for (var i = 0; i < aArgs.length; i++) {
+            this._dbusMsg.appendArgs(aType[i], aArgs[i]);
+        }
+
         this._dbusMsg.member = aName;
         this._dbusMsg.send();
     }
@@ -262,15 +261,26 @@ export class CMediaPlay extends CDBusInterface {
     constructor() {
         super('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play');
     }
+
     GetViewNumber(aCb: (aViewNum: number) => void) {
-        this._call('GetViewNumber', (data: any) => {
+        this._call('GetViewNumber', '', (data: any) => {
+            aCb(data);
+        });
+    }
+
+    GetMainViewId(aCb: (aViewId: number) => void) {
+        this._call('GetMainViewId', '', (data: any) => {
+            aCb(data);
+        });
+    }
+
+    GetPlayType(aViewId: number, aCb: (aPlayType: number) => void) {
+        this._call('GetPlayType', 'u', aViewId, (data: any) => {
             aCb(data);
         });
     }
 /*
     SetMainViewId
-    GetMainViewId
-    GetPlayType
     GetNeedRadioBg
     GetSessionId
     GetRequestId
@@ -328,37 +338,37 @@ export class CMetaService extends CDBusInterface {
         super('Octopus.Appkit.Meta.Service', '/Octopus/Appkit/Meta/Service');
     }
     GetService(aUid: number, aCb: (service: TService) => void) {
-        this._call('GetService', aUid, (data: any) => {
+        this._call('GetService', 'i', aUid, (data: any) => {
             aCb(convert_service(data));
         });
     }
     GetNetwork(aUid: number, aCb: (networkInfo: TNetworkInfo) => void) {
-        this._call('GetNetwork', aUid, (data: any) => {
+        this._call('GetNetwork', 'i', aUid, (data: any) => {
             aCb(convert_network(data));
         });
     }
     GetTransponder(aUid: number, aCb: (transponderInfo: TTransponderInfo) => void) {
-        this._call('GetTransponder', aUid, (data: any) => {
+        this._call('GetTransponder', 'i', aUid, (data: any) => {
             aCb(convert_transponder(data));
         });
     }
     GetProvider(aUid: number, aCb: (providerInfo: TProviderInfo) => void) {
-        this._call('GetProvider', aUid, (data: any) => {
+        this._call('GetProvider', 'i', aUid, (data: any) => {
             aCb(convert_provider(data));
         });
     }
     GetGroup(aUid: number, aCb: (groupInfo: TGroupInfo) => void) {
-        this._call('GetGroup', aUid, (data: any) => {
+        this._call('GetGroup', 'i', aUid, (data: any) => {
             aCb(convert_group(data));
         });
     }
     GetBouquet(aUid: number, aCb: (bouquetInfo: TBouquetInfo) => void) {
-        this._call('GetBouquet', aUid, (data: any) => {
+        this._call('GetBouquet', 'i', aUid, (data: any) => {
             aCb(convert_bouquet(data));
         });
     }
     GetLogoUrl(aUid: number, aBufChannelLogoInfo: any, aCb: (channelLogoInfo: TChannelLogoInfo) => void) {
-        this._call('GetLogoUrl', aUid, (data: any) => {
+        this._call('GetLogoUrl', 'i', aUid, (data: any) => {
             aCb(convert_logo(data));
         });
     }
@@ -372,7 +382,7 @@ export class CMetaService extends CDBusInterface {
 
     }
     GetServiceList(aCb: (serviceList: TService[]) => void) {
-        this._call('GetServiceList', (data) => {
+        this._call('GetServiceList', '', (data) => {
             var serviceList = [];
             data.forEach((s) => {
                 serviceList.push(convert_service(s));
@@ -381,7 +391,7 @@ export class CMetaService extends CDBusInterface {
         });
     }
     GetGroupList(aCb: (groupList: TGroupInfo[]) => void) {
-        this._call('GetGroupList', (data) => {
+        this._call('GetGroupList', '', (data) => {
             var groupList = [];
             data.forEach((g) => {
                 groupList.push(convert_group(g));

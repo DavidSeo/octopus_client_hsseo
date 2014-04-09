@@ -10,6 +10,7 @@
 import octopus = require('../octopus');
 var should = require('should');
 
+
 describe('CMetaService', function() {
 
     var service: octopus.CMetaService;
@@ -69,11 +70,12 @@ describe('CMetaService', function() {
             done();
         });
     });
-
+/*
     it('GetLogoUrl', (done) => {
         service.GetLogoUrl(fitFirstService.uid, null, (channelLogoInfo: octopus.TChannelLogoInfo) => {
             console.log(channelLogoInfo);
             done();
         });
     });
+*/
 });
