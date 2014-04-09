@@ -258,6 +258,71 @@ export class CDBusInterface {
     }
 }
 
+export class CMediaPlay extends CDBusInterface {
+    constructor() {
+        super('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play');
+    }
+    GetViewNumber(aCb: (aViewNum: number) => void) {
+        this._call('GetViewNumber', (data: any) => {
+            aCb(data);
+        });
+    }
+/*
+    SetMainViewId
+    GetMainViewId
+    GetPlayType
+    GetNeedRadioBg
+    GetSessionId
+    GetRequestId
+    GetStreamAspectRatio
+    GetMhegDisplayPoint
+    StartAudioClip
+    PauseAudioClip
+    ResumeAudioClip
+    StopAudioClip
+    SetVideoFreeze
+    SetAudioFreeze
+    SetComponentIndex
+    GetComponentNum
+    GetSubtitleComponent
+    GetComponentIndex
+    StartLive
+    StartPvrPb
+    StartTsrPb
+    StartMedia
+    Stop
+    SetPlaySpeed
+    SetPlayPosition
+    GetPlaySpeed
+    GetPlayPosition
+    GetPlayState
+    GetPlayError
+    GetBufferedTime
+    GetDurationTime
+    GetTsrStartTime
+    GetSupportedSpeeds
+    GetTrickRestrictMode
+    GetVideoSize
+    SetVideoSize
+    ResetVideoSize
+    SetPigRect
+    SetTSREnable
+    SetSubtitleEnable
+    SetVideoHide
+    GetTSREnable
+    GetSubtitleEnable
+    GetEventInfo
+    SaveThumbnail
+    GetMajorChannel
+    CheckPlayChangable
+    GetViewState
+    GetLockState
+    MemorizeMediaState
+    RestoreMediaState
+    GetThumbnail
+*/
+}
+
 export class CMetaService extends CDBusInterface {
     constructor() {
         super('Octopus.Appkit.Meta.Service', '/Octopus/Appkit/Meta/Service');
