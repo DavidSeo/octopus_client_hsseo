@@ -279,13 +279,40 @@ export class CMediaPlay extends CDBusInterface {
             aCb(data);
         });
     }
+
+    GetNeedRadioBg(aViewId: number, aCb: (aIsNeed: number) => void) {
+        this._call('GetNeedRadioBg', 'u', aViewId, (data: any) => {
+            aCb(data);
+        });
+    }
+
+    GetSessionId(aViewId: number, aCb: (aSessionId: number) => void) {
+        this._call('GetSessionId', 'u', aViewId, (data: any) => {
+            aCb(data);
+        });
+    }
+
+    GetRequestId(aViewId: number, aPlayType: number, aCb: (aRequestId: number) => void) {
+        this._call('GetRequestId', 'uu', aViewId, aPlayType, (data: any) => {
+            aCb(data);
+        });
+    }
+
+    GetStreamAspectRatio(aViewId: number, aCb: (aAspectRatio: number) => void) {
+        this._call('GetStreamAspectRatio', 'u', aViewId, (data: any) => {
+            aCb(data);
+        });
+    }
+
+    GetMhegDisplayPoint(aViewId: number, aRefWidth: number, aRefHeight: number, aVideoPointX: number, aVideoPointY: number, aCb: (scaled: number) => void) {
+        this._call('GetMhegDisplayPoint', 'uiiii', aViewId, aRefWidth, aRefHeight, aVideoPointX, aVideoPointY, (data: any) => {
+            aCb(data);
+        });
+    }
 /*
     SetMainViewId
-    GetNeedRadioBg
-    GetSessionId
-    GetRequestId
-    GetStreamAspectRatio
-    GetMhegDisplayPoint
+
+
     StartAudioClip
     PauseAudioClip
     ResumeAudioClip

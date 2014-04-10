@@ -10,7 +10,6 @@
 import octopus = require('../octopus');
 var should = require('should');
 
-
 describe('CMediaPlay', function() {
 
     var mediaplay: octopus.CMediaPlay;
@@ -48,4 +47,56 @@ describe('CMediaPlay', function() {
         });
     });
 
+    it('GetNeedRadioBg', (done) => {
+        mediaplay.GetNeedRadioBg(mainViewId, (aIsNeed: number) => {
+            console.log("GetNeedRadioBg ret : " + aIsNeed);
+            should(aIsNeed < 2).ok;
+            done();
+        });
+    });
+
+    it('GetSessionId', (done) => {
+        mediaplay.GetSessionId(mainViewId, (aSessionId: number) => {
+            console.log("GetSessionId ret : " + aSessionId);
+            //should().ok;
+            done();
+        });
+    });
+
+    it('GetRequestId', (done) => {
+        mediaplay.GetRequestId(mainViewId, 1, (aRequestId: number) => {
+            console.log("GetRequestId (live:1) ret : " + aRequestId);
+            //should().ok;
+        });
+        mediaplay.GetRequestId(mainViewId, 2, (aRequestId: number) => {
+            console.log("GetRequestId (pvrpb:2) ret : " + aRequestId);
+            //should().ok;
+        });
+        mediaplay.GetRequestId(mainViewId, 3, (aRequestId: number) => {
+            console.log("GetRequestId (tsrpb:3) ret : " + aRequestId);
+            //should().ok;
+        });
+        mediaplay.GetRequestId(mainViewId, 4, (aRequestId: number) => {
+            console.log("GetRequestId (mediapb:4) ret : " + aRequestId);
+            //should().ok;
+        });
+
+        done();
+    });
+
+    it('GetStreamAspectRatio', (done) => {
+        mediaplay.GetStreamAspectRatio(mainViewId, (aAspectRatio: number) => {
+            console.log("GetStreamAspectRatio ret : " + aAspectRatio);
+            //should().ok;
+            done();
+        });
+    });
+
+    it('GetMhegDisplayPoint', (done) => {
+        mediaplay.GetMhegDisplayPoint(mainViewId, 0, 0, 1024, 768, (scaled: number) => {
+            console.log("GetMhegDisplayPoint ret : x: " + scaled[0] + " y: " + scaled[1]);
+            //should().ok;
+            done();
+        });
+    });
 });
