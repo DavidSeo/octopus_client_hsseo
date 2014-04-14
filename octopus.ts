@@ -6,7 +6,7 @@
 
 var dbus = require('node-dbus');
 
-var sAddress = 'tcp:host=192.168.123.4,port=55884'
+var sAddress = 'tcp:host=192.168.123.9,port=55884'
 /*
  reval._1 		=	(int32_t)pstSrc->uid;
  reval._2 		=	(int32_t)pstSrc->tsuid;
@@ -98,6 +98,15 @@ export interface TChannelLogoInfo {
     ucLocalLogoUrl: string;
 }
 
+export interface TSubtitleTrack {
+    pid: number;
+    componentTag: number;
+    type: number;
+    typeValue: number;
+    componentExtTag: number;
+    langCode: string;
+}
+
 function convert_service(aDBusData: any): TService {
     var ret: TService = {
         uid: aDBusData[0],
@@ -185,7 +194,24 @@ function convert_logo(aDBusData: any): TChannelLogoInfo {
         svcuid: aDBusData[0],
         ucServerLogoUrl: aDBusData[1],
         ucLocalLogoUrl: aDBusData[2]
-    }
+    };
+    return ret;
+}
+
+function convert_number(aDBusData: any): number {
+    var ret: number = aDBusData;
+    return ret;
+}
+
+function convert_subtitletrack(aDbusData: any): TSubtitleTrack {
+    var ret: TSubtitleTrack = {
+        pid: aDbusData[0],
+        componentTag: aDbusData[1],
+        type: aDbusData[2],
+        typeValue: aDbusData[3],
+        componentExtTag: aDbusData[4],
+        langCode: aDbusData[7],
+    };
     return ret;
 }
 
@@ -246,10 +272,13 @@ export class CDBusInterface {
     _call(aName: string, aType: string, ...aArgs: any[]) {
         var callback = aArgs.pop();
         this._onResponse(callback);
-        this._dbusMsg.clearArgs();
 
-        for (var i = 0; i < aArgs.length; i++) {
-            this._dbusMsg.appendArgs(aType[i], aArgs[i]);
+        if (aType.length) {
+            var args = [aType].concat(aArgs);
+            this._dbusMsg.appendArgs.apply(this._dbusMsg, args);
+        }
+        else{
+            this._dbusMsg.clearArgs();
         }
 
         this._dbusMsg.member = aName;
@@ -261,58 +290,239 @@ export class CMediaPlay extends CDBusInterface {
     constructor() {
         super('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play');
     }
-
     GetViewNumber(aCb: (aViewNum: number) => void) {
         this._call('GetViewNumber', '', (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
-
     GetMainViewId(aCb: (aViewId: number) => void) {
         this._call('GetMainViewId', '', (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
-
     GetPlayType(aViewId: number, aCb: (aPlayType: number) => void) {
         this._call('GetPlayType', 'u', aViewId, (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
-
     GetNeedRadioBg(aViewId: number, aCb: (aIsNeed: number) => void) {
         this._call('GetNeedRadioBg', 'u', aViewId, (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
-
     GetSessionId(aViewId: number, aCb: (aSessionId: number) => void) {
         this._call('GetSessionId', 'u', aViewId, (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
-
     GetRequestId(aViewId: number, aPlayType: number, aCb: (aRequestId: number) => void) {
         this._call('GetRequestId', 'uu', aViewId, aPlayType, (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
-
     GetStreamAspectRatio(aViewId: number, aCb: (aAspectRatio: number) => void) {
         this._call('GetStreamAspectRatio', 'u', aViewId, (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
-
     GetMhegDisplayPoint(aViewId: number, aRefWidth: number, aRefHeight: number, aVideoPointX: number, aVideoPointY: number, aCb: (scaled: number) => void) {
         this._call('GetMhegDisplayPoint', 'uiiii', aViewId, aRefWidth, aRefHeight, aVideoPointX, aVideoPointY, (data: any) => {
-            aCb(data);
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetComponentNum(aViewId: number, aCompType: number, aCb: (aCompCount: number) => void) {
+        this._call('GetComponentNum', 'uu', aViewId, aCompType, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetSubtitleComponent(aViewId: number, aCompIndex: number, aCb: (aComponet: TSubtitleTrack) => void) {
+        this._call('GetSubtitleComponent', 'ui', aViewId, aCompIndex, (data: any) => {
+            aCb(convert_subtitletrack(data));
+        });
+    }
+    GetComponentIndex(aViewId: number, aCompType: number, aCb: (aCompIndex: number) => void) {
+        this._call('GetComponentIndex', 'uu', aViewId, aCompType, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetPlaySpeed(aViewId: number, aCb: (aSpeed: number) => void) {
+        this._call('GetPlaySpeed', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetPlayPosition(aViewId: number, aCb: (aPosition: number) => void) {
+        this._call('GetPlayPosition', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetPlayState(aViewId: number, aCb: (aState: number) => void) {
+        this._call('GetPlayState', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetPlayError(aViewId: number, aCb: (aState: number) => void) {
+        this._call('GetPlayError', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetBufferedTime(aViewId: number, aCb: (aBufferred: number) => void) {
+        this._call('GetBufferedTime', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetDurationTime(aViewId: number, aCb: (aDurationTime: number) => void) {
+        this._call('GetDurationTime', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetTsrStartTime(aViewId: number, aCb: (aTstStartTime: number) => void) {
+        this._call('GetTsrStartTime', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
         });
     }
 /*
+    GetSupportedSpeeds(aViewId: number, aCb: (a: number) => void) {
+        this._call('GetSupportedSpeeds', 'u', aViewId, (data: any) => {
+            aCb(data);
+        });
+    }
+*/
+    GetTrickRestrictMode(aViewId: number, aCb: (aTrickRestrictMode: number) => void) {
+        this._call('GetTrickRestrictMode', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+    GetVideoSize(aViewId: number, aCb: (aSize: number) => void) {
+        this._call('GetVideoSize', 'u', aViewId, (data: any) => {
+            aCb(data);
+        });
+    }
+    GetTSREnable(aCb: (aIsTSR: number) => void) {
+        this._call('GetTSREnable', '', (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+
+    GetSubtitleEnable(aViewId: number, aCb: (aIsSubtitle: number) => void) {
+        this._call('GetSubtitleEnable', 'u', aViewId, (data: any) => {
+            if(data){
+                aCb(convert_number(data));
+            }
+            else{
+                aCb(0);
+            }
+        });
+    }
+
+
+/*
+
+
+
+ GetEventInfo
+ GetMajorChannel
+ CheckPlayChangable
+ GetViewState
+ GetLockState
+ GetThumbnail
+
+
     SetMainViewId
-
-
     StartAudioClip
     PauseAudioClip
     ResumeAudioClip
@@ -320,9 +530,6 @@ export class CMediaPlay extends CDBusInterface {
     SetVideoFreeze
     SetAudioFreeze
     SetComponentIndex
-    GetComponentNum
-    GetSubtitleComponent
-    GetComponentIndex
     StartLive
     StartPvrPb
     StartTsrPb
@@ -330,33 +537,15 @@ export class CMediaPlay extends CDBusInterface {
     Stop
     SetPlaySpeed
     SetPlayPosition
-    GetPlaySpeed
-    GetPlayPosition
-    GetPlayState
-    GetPlayError
-    GetBufferedTime
-    GetDurationTime
-    GetTsrStartTime
-    GetSupportedSpeeds
-    GetTrickRestrictMode
-    GetVideoSize
     SetVideoSize
     ResetVideoSize
     SetPigRect
     SetTSREnable
     SetSubtitleEnable
     SetVideoHide
-    GetTSREnable
-    GetSubtitleEnable
-    GetEventInfo
     SaveThumbnail
-    GetMajorChannel
-    CheckPlayChangable
-    GetViewState
-    GetLockState
     MemorizeMediaState
     RestoreMediaState
-    GetThumbnail
 */
 }
 

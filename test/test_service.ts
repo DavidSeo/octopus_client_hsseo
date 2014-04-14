@@ -24,52 +24,72 @@ describe('CMetaService', function() {
             console.log('count: ' + fitServiceList.length);
             fitFirstService = fitServiceList[0];
             console.log(fitFirstService);
-            done();
+            setTimeout(() => {
+                done();
+            }, 500);
         });
     });
-
+/*
     it('GetService', (done) => {
         service.GetService(fitFirstService.uid, (service: octopus.TService) => {
             console.log(service);
             should(octopus.compare_service(fitFirstService, service)).ok;
-            done();
+            setTimeout(function () {
+                done();
+            }, 500);
+
         });
     });
-
+*/
     it('GetNetwork', (done) => {
         service.GetNetwork(fitFirstService.uid, (networkInfo: octopus.TNetworkInfo) => {
             console.log(networkInfo);
-            done();
+            setTimeout(function () {
+                done();
+            }, 500);
+
         });
     });
 
     it('GetTransponder', (done) => {
         service.GetTransponder(fitFirstService.uid, (transponderInfo: octopus.TTransponderInfo) => {
             console.log(transponderInfo);
-            done();
+            setTimeout(function () {
+                done();
+            }, 500);
+
         });
     });
 
     it('GetProvider', (done) => {
         service.GetProvider(fitFirstService.uid, (providerInfo: octopus.TProviderInfo) => {
             console.log(providerInfo);
-            done();
+            setTimeout(function () {
+                done();
+            }, 500);
         });
     });
 
     it('GetGroup', (done) => {
         service.GetGroup(fitFirstService.uid, (groupInfo: octopus.TGroupInfo) => {
             console.log(groupInfo);
-            done();
+            setTimeout(function () {
+                done();
+            }, 500);
+
         });
     });
 
     it('GetBouquet', (done) => {
         service.GetBouquet(fitFirstService.uid, (bouquetInfo: octopus.TBouquetInfo) => {
             console.log(bouquetInfo);
-            done();
+            setTimeout(function () {
+                done();
+            }, 500);
+
         });
     });
+
 /*
     it('GetLogoUrl', (done) => {
         service.GetLogoUrl(fitFirstService.uid, null, (channelLogoInfo: octopus.TChannelLogoInfo) => {
