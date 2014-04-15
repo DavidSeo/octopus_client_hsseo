@@ -248,7 +248,7 @@ export class CDBusInterface {
                 value: dbus.DBUS_BUS_SESSION
             },
             type: {
-                value: dbus.DBUS_MESSAGE_TYPE_METHOD_CALL, // dbus.DBUS_MESSAGE_TYPE_METHOD_RETURN,
+                value: dbus.DBUS_MESSAGE_TYPE_METHOD_RETURN, // dbus.DBUS_MESSAGE_TYPE_METHOD_RETURN,
                 writable: true
             }
         });
@@ -292,94 +292,54 @@ export class CMediaPlay extends CDBusInterface {
     }
     GetViewNumber(aCb: (aViewNum: number) => void) {
         this._call('GetViewNumber', '', (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetMainViewId(aCb: (aViewId: number) => void) {
         this._call('GetMainViewId', '', (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetPlayType(aViewId: number, aCb: (aPlayType: number) => void) {
         this._call('GetPlayType', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetNeedRadioBg(aViewId: number, aCb: (aIsNeed: number) => void) {
         this._call('GetNeedRadioBg', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetSessionId(aViewId: number, aCb: (aSessionId: number) => void) {
         this._call('GetSessionId', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+             aCb(convert_number(data));
         });
     }
+
     GetRequestId(aViewId: number, aPlayType: number, aCb: (aRequestId: number) => void) {
         this._call('GetRequestId', 'uu', aViewId, aPlayType, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
+
     GetStreamAspectRatio(aViewId: number, aCb: (aAspectRatio: number) => void) {
         this._call('GetStreamAspectRatio', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
-    GetMhegDisplayPoint(aViewId: number, aRefWidth: number, aRefHeight: number, aVideoPointX: number, aVideoPointY: number, aCb: (scaled: number) => void) {
+
+    GetMhegDisplayPoint(aViewId: number, aRefWidth: number, aRefHeight: number, aVideoPointX: number, aVideoPointY: number, aCb: (scaledX: number, scaledY: number) => void) {
         this._call('GetMhegDisplayPoint', 'uiiii', aViewId, aRefWidth, aRefHeight, aVideoPointX, aVideoPointY, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data[0]), convert_number(data[1]));
         });
     }
+
     GetComponentNum(aViewId: number, aCompType: number, aCb: (aCompCount: number) => void) {
         this._call('GetComponentNum', 'uu', aViewId, aCompType, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
+
     GetSubtitleComponent(aViewId: number, aCompIndex: number, aCb: (aComponet: TSubtitleTrack) => void) {
         this._call('GetSubtitleComponent', 'ui', aViewId, aCompIndex, (data: any) => {
             aCb(convert_subtitletrack(data));
@@ -465,13 +425,13 @@ export class CMediaPlay extends CDBusInterface {
             }
         });
     }
-/*
+
     GetSupportedSpeeds(aViewId: number, aCb: (a: number) => void) {
         this._call('GetSupportedSpeeds', 'u', aViewId, (data: any) => {
             aCb(data);
         });
     }
-*/
+
     GetTrickRestrictMode(aViewId: number, aCb: (aTrickRestrictMode: number) => void) {
         this._call('GetTrickRestrictMode', 'u', aViewId, (data: any) => {
             if(data){
@@ -482,11 +442,13 @@ export class CMediaPlay extends CDBusInterface {
             }
         });
     }
-    GetVideoSize(aViewId: number, aCb: (aSize: number) => void) {
-        this._call('GetVideoSize', 'u', aViewId, (data: any) => {
-            aCb(data);
+
+    GetVideoSize(aViewId: number, aCb: (startX: number, startY: number, width: number, height: number) => void) {
+        this._call('GetVideoSize', 'u', aViewId, (data1: any, data2: any, data3: any, data4: any) => {
+            aCb(data1, data2, data3, data4);
         });
     }
+
     GetTSREnable(aCb: (aIsTSR: number) => void) {
         this._call('GetTSREnable', '', (data: any) => {
             if(data){

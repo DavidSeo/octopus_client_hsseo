@@ -29,7 +29,7 @@ describe('CMetaService', function() {
             }, 500);
         });
     });
-/*
+
     it('GetService', (done) => {
         service.GetService(fitFirstService.uid, (service: octopus.TService) => {
             console.log(service);
@@ -40,7 +40,7 @@ describe('CMetaService', function() {
 
         });
     });
-*/
+
     it('GetNetwork', (done) => {
         service.GetNetwork(fitFirstService.uid, (networkInfo: octopus.TNetworkInfo) => {
             console.log(networkInfo);
