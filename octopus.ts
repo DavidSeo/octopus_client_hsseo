@@ -5,6 +5,7 @@
 /// <reference path="def/node.d.ts" />
 
 var dbus = require('node-dbus');
+var newdbus = require('dbus');
 
 var sAddress = 'tcp:host=192.168.123.9,port=55884'
 /*
@@ -210,7 +211,7 @@ function convert_subtitletrack(aDbusData: any): TSubtitleTrack {
         type: aDbusData[2],
         typeValue: aDbusData[3],
         componentExtTag: aDbusData[4],
-        langCode: aDbusData[7],
+        langCode: aDbusData[7]
     };
     return ret;
 }
@@ -222,6 +223,88 @@ export function compare_service(aA: TService, aB: TService): boolean {
     return true;
 }
 
+export class CDBusInterface {
+    private _dbusClass;
+    private _dbusHandle;
+    private _Destination;
+    private _Path;
+
+    constructor(aDestination: string, aPath: string) {
+        var dbusClass = new newdbus();
+        var dbusHandle = dbusClass.getBus('open', 'tcp:host=192.168.123.9,port=55884');
+
+        this._dbusHandle = dbusHandle;
+        this._dbusClass = dbusClass;
+        this._Destination = aDestination;
+        this._Path = aPath;
+    }
+
+    _call(aCb: Function) {
+        this._dbusHandle.getInterface(this._Destination, this._Path, this._Destination, function (err, iface) {
+            aCb(iface);
+        });
+    }
+}
+
+export class CMediaPlay extends CDBusInterface {
+    public _iface;
+    constructor() {
+        super('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play');
+    }
+
+    GetViewNumber(aCb: (aViewNum: number) => void) {
+        this._call( function (iface){
+            iface.GetMainViewId['finish'] = function(viewNumber: number) {
+                aCb(viewNumber);
+            };
+            iface.GetMainViewId();
+        });
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 export class CDBusInterface {
     private _dbusMsg;
     private _onResponseCb: Function;
@@ -286,6 +369,7 @@ export class CDBusInterface {
     }
 }
 
+
 export class CMediaPlay extends CDBusInterface {
     constructor() {
         super('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play');
@@ -347,82 +431,42 @@ export class CMediaPlay extends CDBusInterface {
     }
     GetComponentIndex(aViewId: number, aCompType: number, aCb: (aCompIndex: number) => void) {
         this._call('GetComponentIndex', 'uu', aViewId, aCompType, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetPlaySpeed(aViewId: number, aCb: (aSpeed: number) => void) {
         this._call('GetPlaySpeed', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetPlayPosition(aViewId: number, aCb: (aPosition: number) => void) {
         this._call('GetPlayPosition', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetPlayState(aViewId: number, aCb: (aState: number) => void) {
         this._call('GetPlayState', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetPlayError(aViewId: number, aCb: (aState: number) => void) {
         this._call('GetPlayError', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetBufferedTime(aViewId: number, aCb: (aBufferred: number) => void) {
         this._call('GetBufferedTime', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetDurationTime(aViewId: number, aCb: (aDurationTime: number) => void) {
         this._call('GetDurationTime', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
     GetTsrStartTime(aViewId: number, aCb: (aTstStartTime: number) => void) {
         this._call('GetTsrStartTime', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
 
@@ -434,12 +478,7 @@ export class CMediaPlay extends CDBusInterface {
 
     GetTrickRestrictMode(aViewId: number, aCb: (aTrickRestrictMode: number) => void) {
         this._call('GetTrickRestrictMode', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
 
@@ -451,66 +490,39 @@ export class CMediaPlay extends CDBusInterface {
 
     GetTSREnable(aCb: (aIsTSR: number) => void) {
         this._call('GetTSREnable', '', (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
 
     GetSubtitleEnable(aViewId: number, aCb: (aIsSubtitle: number) => void) {
         this._call('GetSubtitleEnable', 'u', aViewId, (data: any) => {
-            if(data){
-                aCb(convert_number(data));
-            }
-            else{
-                aCb(0);
-            }
+            aCb(convert_number(data));
         });
     }
 
+    StartLive(aViewId: number, aLiveType: number, aMasterSvcUid: number, aSuppleSvcUid: number, aSuppSvcType: number, aMajorCHNum: number, aCb: (aSessionId: number) => void) {
+
+        this._call('StartLive', "u(iiiii)", aViewId, aLiveType, aMasterSvcUid, aSuppleSvcUid, aSuppSvcType, aMajorCHNum, (data: any) => {
+            aCb(convert_number(data));
+        });
+
+        var dbushandle = new newdbus();
+        var bus = dbushandle.getBus('open', 'tcp:host=192.168.123.9,port=55884');
+        bus.getInterface('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play', 'Octopus.Appkit.Media.Play', function(err, iface) {
+
+            iface.StartLive['finish'] = function(aSessionId: number) {
+                aCb(aSessionId);
+                console.log('SessionId ' + aSessionId);
+            };
+
+            iface.StartLive(0,[1,2,3,4,5]);
+        });
+    }
+}
+*/
+
 
 /*
-
-
-
- GetEventInfo
- GetMajorChannel
- CheckPlayChangable
- GetViewState
- GetLockState
- GetThumbnail
-
-
-    SetMainViewId
-    StartAudioClip
-    PauseAudioClip
-    ResumeAudioClip
-    StopAudioClip
-    SetVideoFreeze
-    SetAudioFreeze
-    SetComponentIndex
-    StartLive
-    StartPvrPb
-    StartTsrPb
-    StartMedia
-    Stop
-    SetPlaySpeed
-    SetPlayPosition
-    SetVideoSize
-    ResetVideoSize
-    SetPigRect
-    SetTSREnable
-    SetSubtitleEnable
-    SetVideoHide
-    SaveThumbnail
-    MemorizeMediaState
-    RestoreMediaState
-*/
-}
-
 export class CMetaService extends CDBusInterface {
     constructor() {
         super('Octopus.Appkit.Meta.Service', '/Octopus/Appkit/Meta/Service');
@@ -608,7 +620,7 @@ export class CMetaService extends CDBusInterface {
 
     }
 }
-
+*/
 export function set_config(aConnectionConfig: string) {
     sAddress = aConnectionConfig;
 }
