@@ -4,6 +4,7 @@
   "dependencies": {
     "node-dbus": "~0.1.3",
     "should": "~3.3.0",
-    "async": "~0.7.0"
+    "async": "~0.7.0",
+    "dbus": "git://github.com/DavidSeo/node-dbus"
   }
 }
