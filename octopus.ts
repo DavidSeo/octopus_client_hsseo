@@ -7,7 +7,7 @@
 var dbus = require('node-dbus');
 var newdbus = require('dbus');
 
-var sAddress = 'tcp:host=192.168.123.9,port=55884'
+var sAddress = 'tcp:host=10.0.12.150,port=55884'
 /*
  reval._1 		=	(int32_t)pstSrc->uid;
  reval._2 		=	(int32_t)pstSrc->tsuid;
@@ -199,11 +199,6 @@ function convert_logo(aDBusData: any): TChannelLogoInfo {
     return ret;
 }
 
-function convert_number(aDBusData: any): number {
-    var ret: number = aDBusData;
-    return ret;
-}
-
 function convert_subtitletrack(aDbusData: any): TSubtitleTrack {
     var ret: TSubtitleTrack = {
         pid: aDbusData[0],
@@ -215,7 +210,6 @@ function convert_subtitletrack(aDbusData: any): TSubtitleTrack {
     };
     return ret;
 }
-
 export function compare_service(aA: TService, aB: TService): boolean {
     if (aA.uid != aB.uid) {
         return false;
@@ -231,7 +225,7 @@ export class CDBusInterface {
 
     constructor(aDestination: string, aPath: string) {
         var dbusClass = new newdbus();
-        var dbusHandle = dbusClass.getBus('open', 'tcp:host=192.168.123.9,port=55884');
+        var dbusHandle = dbusClass.getBus('open', sAddress);
 
         this._dbusHandle = dbusHandle;
         this._dbusClass = dbusClass;
@@ -247,321 +241,156 @@ export class CDBusInterface {
 }
 
 export class CMediaPlay extends CDBusInterface {
-    public _iface;
     constructor() {
         super('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play');
     }
 
     GetViewNumber(aCb: (aViewNum: number) => void) {
         this._call( function (iface){
-            iface.GetMainViewId['finish'] = function(viewNumber: number) {
-                aCb(viewNumber);
+            iface.GetViewNumber['finish'] = function(aViewNum: number) {
+                aCb(aViewNum);
+            };
+            iface.GetViewNumber();
+        });
+    }
+
+    SetMainViewId(aViewId: number, aCb: () => void) {
+        this._call( function (iface){
+            iface.SetMainViewId['finish'] = function() {
+                aCb();
+            };
+            iface.SetMainViewId(aViewId);
+        });
+    }
+
+    GetMainViewId(aCb: (aViewId: number) => void) {
+        this._call( function (iface){
+            iface.GetMainViewId['finish'] = function(aViewId: number) {
+                aCb(aViewId);
             };
             iface.GetMainViewId();
         });
     }
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-export class CDBusInterface {
-    private _dbusMsg;
-    private _onResponseCb: Function;
-    constructor(aDestination: string, aPath: string) {
-        var dbusMsg = Object.create(dbus.DBusMessage, {
-            address: {
-                value: sAddress
-            },
-            destination: {
-                value: aDestination
-            },
-            path: {
-                value: aPath
-            },
-            iface: {
-                value: aDestination
-            },
-            member: {
-                value: 'GetServiceList',
-                //value: 'Properties',
-                writable: true
-            },
-            bus: {
-                value: dbus.DBUS_BUS_SESSION
-            },
-            type: {
-                value: dbus.DBUS_MESSAGE_TYPE_METHOD_RETURN, // dbus.DBUS_MESSAGE_TYPE_METHOD_RETURN,
-                writable: true
-            }
-        });
-        dbusMsg.on ("methodResponse", (data) => {
-            if (this._onResponseCb) {
-                this._onResponseCb(data);
-            }
-        });
-
-        dbusMsg.on ("error", function (error) {
-            console.log ("[FAILED] ERROR -- ");
-            console.log(error);
-        });
-
-        this._dbusMsg = dbusMsg;
-    }
-    _onResponse(aCb: (aData: any) => void) {
-        this._onResponseCb = aCb;
-    }
-
-    _call(aName: string, aType: string, ...aArgs: any[]) {
-        var callback = aArgs.pop();
-        this._onResponse(callback);
-
-        if (aType.length) {
-            var args = [aType].concat(aArgs);
-            this._dbusMsg.appendArgs.apply(this._dbusMsg, args);
-        }
-        else{
-            this._dbusMsg.clearArgs();
-        }
-
-        this._dbusMsg.member = aName;
-        this._dbusMsg.send();
-    }
-}
-
-
-export class CMediaPlay extends CDBusInterface {
-    constructor() {
-        super('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play');
-    }
-    GetViewNumber(aCb: (aViewNum: number) => void) {
-        this._call('GetViewNumber', '', (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetMainViewId(aCb: (aViewId: number) => void) {
-        this._call('GetMainViewId', '', (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
     GetPlayType(aViewId: number, aCb: (aPlayType: number) => void) {
-        this._call('GetPlayType', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetNeedRadioBg(aViewId: number, aCb: (aIsNeed: number) => void) {
-        this._call('GetNeedRadioBg', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetSessionId(aViewId: number, aCb: (aSessionId: number) => void) {
-        this._call('GetSessionId', 'u', aViewId, (data: any) => {
-             aCb(convert_number(data));
+        this._call( function (iface){
+            iface.GetPlayType['finish'] = function(aPlayType: number) {
+                aCb(aPlayType);
+            };
+            iface.GetPlayType(aViewId);
         });
     }
 
-    GetRequestId(aViewId: number, aPlayType: number, aCb: (aRequestId: number) => void) {
-        this._call('GetRequestId', 'uu', aViewId, aPlayType, (data: any) => {
-            aCb(convert_number(data));
+    GetNeedRadioBg(aViewId: number, aCb: (aIsNeed: number) => void) {
+        this._call( function (iface){
+            iface.GetNeedRadioBg['finish'] = function(aIsNeed: number) {
+                aCb(aIsNeed);
+            };
+            iface.GetNeedRadioBg(aViewId);
+        });
+    }
+
+    GetSessionId(aViewId: number, aCb: (aSessionId: number) => void) {
+        this._call( function (iface){
+            iface.GetSessionId['finish'] = function(aSessionId: number) {
+                aCb(aSessionId);
+            };
+            iface.GetSessionId(aViewId);
+        });
+    }
+
+    GetRequestId(aViewId: number, aPlaytype: number, aCb: (aRequestId: number) => void) {
+        this._call( function (iface){
+            iface.GetRequestId['finish'] = function(aRequestId: number) {
+                aCb(aRequestId);
+            };
+            iface.GetRequestId(aViewId, aPlaytype);
         });
     }
 
     GetStreamAspectRatio(aViewId: number, aCb: (aAspectRatio: number) => void) {
-        this._call('GetStreamAspectRatio', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-
-    GetMhegDisplayPoint(aViewId: number, aRefWidth: number, aRefHeight: number, aVideoPointX: number, aVideoPointY: number, aCb: (scaledX: number, scaledY: number) => void) {
-        this._call('GetMhegDisplayPoint', 'uiiii', aViewId, aRefWidth, aRefHeight, aVideoPointX, aVideoPointY, (data: any) => {
-            aCb(convert_number(data[0]), convert_number(data[1]));
-        });
-    }
-
-    GetComponentNum(aViewId: number, aCompType: number, aCb: (aCompCount: number) => void) {
-        this._call('GetComponentNum', 'uu', aViewId, aCompType, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-
-    GetSubtitleComponent(aViewId: number, aCompIndex: number, aCb: (aComponet: TSubtitleTrack) => void) {
-        this._call('GetSubtitleComponent', 'ui', aViewId, aCompIndex, (data: any) => {
-            aCb(convert_subtitletrack(data));
-        });
-    }
-    GetComponentIndex(aViewId: number, aCompType: number, aCb: (aCompIndex: number) => void) {
-        this._call('GetComponentIndex', 'uu', aViewId, aCompType, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetPlaySpeed(aViewId: number, aCb: (aSpeed: number) => void) {
-        this._call('GetPlaySpeed', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetPlayPosition(aViewId: number, aCb: (aPosition: number) => void) {
-        this._call('GetPlayPosition', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetPlayState(aViewId: number, aCb: (aState: number) => void) {
-        this._call('GetPlayState', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetPlayError(aViewId: number, aCb: (aState: number) => void) {
-        this._call('GetPlayError', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetBufferedTime(aViewId: number, aCb: (aBufferred: number) => void) {
-        this._call('GetBufferedTime', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetDurationTime(aViewId: number, aCb: (aDurationTime: number) => void) {
-        this._call('GetDurationTime', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-    GetTsrStartTime(aViewId: number, aCb: (aTstStartTime: number) => void) {
-        this._call('GetTsrStartTime', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-
-    GetSupportedSpeeds(aViewId: number, aCb: (a: number) => void) {
-        this._call('GetSupportedSpeeds', 'u', aViewId, (data: any) => {
-            aCb(data);
-        });
-    }
-
-    GetTrickRestrictMode(aViewId: number, aCb: (aTrickRestrictMode: number) => void) {
-        this._call('GetTrickRestrictMode', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-
-    GetVideoSize(aViewId: number, aCb: (startX: number, startY: number, width: number, height: number) => void) {
-        this._call('GetVideoSize', 'u', aViewId, (data1: any, data2: any, data3: any, data4: any) => {
-            aCb(data1, data2, data3, data4);
-        });
-    }
-
-    GetTSREnable(aCb: (aIsTSR: number) => void) {
-        this._call('GetTSREnable', '', (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-
-    GetSubtitleEnable(aViewId: number, aCb: (aIsSubtitle: number) => void) {
-        this._call('GetSubtitleEnable', 'u', aViewId, (data: any) => {
-            aCb(convert_number(data));
-        });
-    }
-
-    StartLive(aViewId: number, aLiveType: number, aMasterSvcUid: number, aSuppleSvcUid: number, aSuppSvcType: number, aMajorCHNum: number, aCb: (aSessionId: number) => void) {
-
-        this._call('StartLive', "u(iiiii)", aViewId, aLiveType, aMasterSvcUid, aSuppleSvcUid, aSuppSvcType, aMajorCHNum, (data: any) => {
-            aCb(convert_number(data));
-        });
-
-        var dbushandle = new newdbus();
-        var bus = dbushandle.getBus('open', 'tcp:host=192.168.123.9,port=55884');
-        bus.getInterface('Octopus.Appkit.Media.Play', '/Octopus/Appkit/Media/Play', 'Octopus.Appkit.Media.Play', function(err, iface) {
-
-            iface.StartLive['finish'] = function(aSessionId: number) {
-                aCb(aSessionId);
-                console.log('SessionId ' + aSessionId);
+        this._call( function (iface){
+            iface.GetStreamAspectRatio['finish'] = function(aAspectRatio: number) {
+                aCb(aAspectRatio);
             };
+            iface.GetStreamAspectRatio(aViewId);
+        });
+    }
 
-            iface.StartLive(0,[1,2,3,4,5]);
+    GetMhegDisplayPoint(aViewId: number, aRefWidth: number, aRefHeight:number, aVideoPointX: number, aVideoPointY: number, aCb: (aScaledSizeW: number, aScaledSizeH: number) => void) {
+        this._call( function (iface){
+            iface.GetMhegDisplayPoint['finish'] = function(aScaledSize: any) {
+                console.log(aScaledSize)
+                aCb(aScaledSize[0], aScaledSize[1]);
+            };
+            iface.GetMhegDisplayPoint(aViewId, aRefWidth, aRefHeight, aVideoPointX, aVideoPointY);
         });
     }
 }
-*/
 
-
-/*
 export class CMetaService extends CDBusInterface {
     constructor() {
         super('Octopus.Appkit.Meta.Service', '/Octopus/Appkit/Meta/Service');
     }
     GetService(aUid: number, aCb: (service: TService) => void) {
-        this._call('GetService', 'i', aUid, (data: any) => {
-            aCb(convert_service(data));
+        this._call( function (iface){
+            iface.GetService['finish'] = function(data) {
+                aCb(convert_service(data));
+            };
+            iface.GetService(aUid);
         });
     }
+
     GetNetwork(aUid: number, aCb: (networkInfo: TNetworkInfo) => void) {
-        this._call('GetNetwork', 'i', aUid, (data: any) => {
-            aCb(convert_network(data));
+        this._call( function (iface){
+            iface.GetNetwork['finish'] = function(data) {
+                aCb(convert_network(data));
+            };
+            iface.GetNetwork(aUid);
         });
     }
     GetTransponder(aUid: number, aCb: (transponderInfo: TTransponderInfo) => void) {
-        this._call('GetTransponder', 'i', aUid, (data: any) => {
-            aCb(convert_transponder(data));
+        this._call( function (iface){
+            iface.GetTransponder['finish'] = function(data) {
+                aCb(convert_transponder(data));
+            };
+            iface.GetTransponder(aUid);
         });
     }
     GetProvider(aUid: number, aCb: (providerInfo: TProviderInfo) => void) {
-        this._call('GetProvider', 'i', aUid, (data: any) => {
-            aCb(convert_provider(data));
+        this._call( function (iface){
+            iface.GetProvider['finish'] = function(data) {
+                aCb(convert_provider(data));
+            };
+            iface.GetProvider(aUid);
         });
     }
     GetGroup(aUid: number, aCb: (groupInfo: TGroupInfo) => void) {
-        this._call('GetGroup', 'i', aUid, (data: any) => {
-            aCb(convert_group(data));
+        this._call( function (iface){
+            iface.GetGroup['finish'] = function(data) {
+                aCb(convert_group(data));
+            };
+            iface.GetGroup(aUid);
         });
     }
     GetBouquet(aUid: number, aCb: (bouquetInfo: TBouquetInfo) => void) {
-        this._call('GetBouquet', 'i', aUid, (data: any) => {
-            aCb(convert_bouquet(data));
+        this._call( function (iface){
+            iface.GetBouquet['finish'] = function(data) {
+                aCb(convert_bouquet(data));
+            };
+            iface.GetBouquet(aUid);
         });
     }
+
     GetLogoUrl(aUid: number, aBufChannelLogoInfo: any, aCb: (channelLogoInfo: TChannelLogoInfo) => void) {
-        this._call('GetLogoUrl', 'i', aUid, (data: any) => {
-            aCb(convert_logo(data));
+        this._call( function (iface){
+            iface.GetLogoUrl['finish'] = function(data) {
+                //aCb(convert_logoUrl(data));
+            };
+            iface.GetLogoUrl(aUid);
         });
     }
+
     GetServiceTriplet(aUid: number, aTsid: number, aOnid: number, aSid: number, aCb: (triplet: any) => void) {
 
     }
@@ -571,15 +400,21 @@ export class CMetaService extends CDBusInterface {
     FindServiceByNumber(aNumber: number, aCb: (service: TService) => void) {
 
     }
+
     GetServiceList(aCb: (serviceList: TService[]) => void) {
-        this._call('GetServiceList', '', (data) => {
-            var serviceList = [];
-            data.forEach((s) => {
-                serviceList.push(convert_service(s));
-            });
-            aCb(serviceList);
+        this._call( function (iface){
+            iface.GetServiceList['finish'] = function(data) {
+                console.log(data);
+                var serviceList = [];
+                data.forEach((s) => {
+                    serviceList.push(convert_service(s));
+                });
+                aCb(serviceList);
+            };
+            iface.GetServiceList();
         });
     }
+/*
     GetGroupList(aCb: (groupList: TGroupInfo[]) => void) {
         this._call('GetGroupList', '', (data) => {
             var groupList = [];
@@ -589,6 +424,7 @@ export class CMetaService extends CDBusInterface {
             aCb(groupList);
         })
     }
+*/
     Load() {
 
     }
@@ -619,8 +455,4 @@ export class CMetaService extends CDBusInterface {
     RemoveServiceWithFlag() {
 
     }
-}
-*/
-export function set_config(aConnectionConfig: string) {
-    sAddress = aConnectionConfig;
 }
