@@ -19,7 +19,7 @@ describe('CMetaService', function() {
     before((done) => {
         service = new octopus.CMetaService();
         console.log('fixture set up');
-        service.GetServiceList((serviceList) => {
+        service.GetServiceList(serviceList => {
             fitServiceList = serviceList;
             console.log('count: ' + fitServiceList.length);
             fitFirstService = fitServiceList[0];

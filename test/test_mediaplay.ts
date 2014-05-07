@@ -32,7 +32,6 @@ describe('CMediaPlay', function() {
                 done();
             }, 500);
         });
-
     });
 
     it('GetMainViewId', (done) => {
@@ -92,7 +91,7 @@ describe('CMediaPlay', function() {
             }, 500);
         });
     });
-
+/*
     it('GetMhegDisplayPoint', (done) => {
         mediaplay.GetMhegDisplayPoint(mainViewId, 0, 0, 1024, 768, (scaledX: number, scaledY: number) => {
             console.log("GetMhegDisplayPoint ret : x: " + scaledX + " y: " + scaledY);
@@ -101,11 +100,12 @@ describe('CMediaPlay', function() {
                 done();
             }, 500);
         });
-    });
+    })
+
 
     it('GetComponentNum', (done) => {
         mediaplay.GetComponentNum(0, 3, (aCompCount: number) => {
-            console.log("GetComponentNum (3:subtitle)ret : " + aCompCount);
+            console.log("GetComponentNum (l3:subtitle)ret : " + aCompCount);
             //should().ok;
             setTimeout(function () {
                 done();
@@ -232,5 +232,5 @@ describe('CMediaPlay', function() {
             }, 500);
         });
     });
-
+*/
 });
