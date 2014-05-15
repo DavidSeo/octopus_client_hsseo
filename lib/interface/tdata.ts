@@ -111,6 +111,46 @@ module TDATA
         extInfo : ArrayBuffer;
     }
 
+    export interface TEvent {
+        type : number;
+        refCount : number;
+        uid : number;
+        svcuid : number;
+        onid : number;
+        tsid : number;
+        svcid : number;
+        eventid : number;
+        startTime : number;
+        duration : number;
+        runStatus : number;
+        freeCaMode : number;
+        language : number;
+        name : string;
+        text : string;
+        parentalRating : number;
+    }
+
+    export function convert_event(aDBusData:any):TEvent {
+        var ret:TEvent = {
+            type : aDBusData[0][0],
+            refCount : aDBusData[0][1],
+            uid : aDBusData[0][2],
+            svcuid : aDBusData[0][3],
+            onid : aDBusData[0][4],
+            tsid : aDBusData[0][5],
+            svcid : aDBusData[0][6],
+            eventid : aDBusData[0][7],
+            startTime : aDBusData[0][8],
+            duration : aDBusData[0][9],
+            runStatus : aDBusData[0][10],
+            freeCaMode : aDBusData[0][11],
+            language : aDBusData[1][0],
+            name : aDBusData[2][1],
+            text : aDBusData[3][2],
+            parentalRating : aDBusData[4][3]
+        };
+        return ret;
+    }
     export function convert_antennainfo(aDBusData:any):TAntennaInfo {
         var ret:TAntennaInfo = {
             uid: aDBusData[0],
