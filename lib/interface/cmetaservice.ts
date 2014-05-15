@@ -14,6 +14,14 @@ class CMetaService extends dbusConn.CDBusInterface {
         super('Octopus.Appkit.Meta.Service', '/Octopus/Appkit/Meta/Service');
     }
 
+    StartEvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number, param3: number) => void) {
+        this._call( function (iface){
+            iface.on('event', function(msgInt: number, msgStr: string, param1: number, param2: number, param3: number) {
+                aCb(msgInt, msgStr, param1, param2, param3);
+            });
+        });
+    }
+    
     GetService(aUid: number, aCb: (service: tdata.TService) => void) {
         this._call( function (iface){
             iface.GetService['finish'] = function(data) {
@@ -73,14 +81,31 @@ class CMetaService extends dbusConn.CDBusInterface {
         });
     }
 
-    GetServiceTriplet(aUid: number, aTsid: number, aOnid: number, aSid: number, aCb: (triplet: any) => void) {
-
+    GetServiceTriplet(aUid: number, aCb: (aTsid: number, aOnid: number, aSid: number, aResult: number) => void) {
+        this._call( function (iface){
+            iface.GetServiceTriplet['finish'] = function(aTsid: number, aOnid: number, aSid: number, aResult: number) {
+                aCb(aTsid, aOnid, aSid, aResult);
+            };
+            iface.GetServiceTriplet(aUid);
+        });
     }
+
     FindServiceByTriplet(aOnId: number, aTsId: number, aSvcid: number, aCb:(service: tdata.TService) => void) {
-
+        this._call( function (iface){
+            iface.FindServiceByTriplet['finish'] = function(data) {
+                aCb(tdata.convert_service(data));
+            };
+            iface.FindServiceByTriplet(aOnId, aTsId, aSvcid);
+        });
     }
-    FindServiceByNumber(aNumber: number, aCb: (service: tdata.TService) => void) {
 
+    FindServiceByNumber(aNumber: number, aCb: (service: tdata.TService) => void) {
+        this._call( function (iface){
+            iface.FindServiceByNumber['finish'] = function(data) {
+                aCb(tdata.convert_service(data));
+            };
+            iface.FindServiceByNumber(aNumber);
+        });
     }
 
     GetServiceList(aCb: (serviceList: tdata.TService[]) => void) {
@@ -96,46 +121,110 @@ class CMetaService extends dbusConn.CDBusInterface {
             iface.GetServiceList();
         });
     }
-    /*
-     GetGroupList(aCb: (groupList: TGroupInfo[]) => void) {
-     this._call('GetGroupList', '', (data) => {
-     var groupList = [];
-     data.forEach((g) => {
-     groupList.push(convert_group(g));
-     });
-     aCb(groupList);
-     })
-     }
-     */
-    Load() {
 
+
+    GetGroupList(aCb: (groupList: tdata.TGroupInfo[]) => void) {
+        this._call( function (iface){
+            iface.GetGroupList['finish'] = function(data) {
+                console.log(data);
+                var groupList = [];
+                data.forEach((g) => {
+                    groupList.push(tdata.convert_group(g));
+                });
+                aCb(groupList);
+            };
+            iface.GetGroupList();
+        });
     }
-    Save() {
 
+    Load(aCb: () => void) {
+        this._call( function (iface){
+            iface.Load['finish'] = function() {
+                aCb();
+            };
+            iface.Load();
+        });
     }
-    SetService(aService: tdata.TService) {
 
+    Save(aCb: () => void) {
+        this._call( function (iface){
+            iface.Save['finish'] = function() {
+                aCb();
+            };
+            iface.Save();
+        });
     }
-    AddService(aService: tdata.TService) {
 
+    SetService(aService: tdata.TService, aCb: () => void) {
+        this._call( function (iface){
+            iface.SetService['finish'] = function() {
+                aCb();
+            };
+            iface.SetService(aService);
+        });
     }
-    RemoveService(aService: tdata.TService) {
 
+    AddService(aService: tdata.TService, aCb: () => void) {
+        this._call( function (iface){
+            iface.AddService['finish'] = function() {
+                aCb();
+            };
+            iface.AddService(aService);
+        });
     }
-    Reset() {
 
+    RemoveService(aService: tdata.TService, aCb: () => void) {
+        this._call( function (iface){
+            iface.RemoveService['finish'] = function() {
+                aCb();
+            };
+            iface.RemoveService(aService);
+        });
     }
-    LoadPreferredList() {
 
+    Reset(aCb: () => void) {
+        this._call( function (iface){
+            iface.Reset['finish'] = function() {
+                aCb();
+            };
+            iface.Reset();
+        });
     }
-    LoadupdatedList() {
 
+    LoadPreferredList(aCb: () => void) {
+        this._call( function (iface){
+            iface.LoadPreferredList['finish'] = function() {
+                aCb();
+            };
+            iface.LoadPreferredList();
+        });
     }
-    ChangeUpdateFlag() {
 
+    LoadupdatedList(aCb: () => void) {
+        this._call( function (iface){
+            iface.LoadupdatedList['finish'] = function() {
+                aCb();
+            };
+            iface.LoadupdatedList();
+        });
     }
-    RemoveServiceWithFlag() {
 
+    ChangeUpdateFlag(aFromFlag: number, aToFlag: number, aCb: () => void) {
+        this._call( function (iface){
+            iface.ChangeUpdateFlag['finish'] = function() {
+                aCb();
+            };
+            iface.ChangeUpdateFlag(aFromFlag, aToFlag);
+        });
+    }
+
+    RemoveServiceWithFlag(aFlag: number, aCb: () => void) {
+        this._call( function (iface){
+            iface.RemoveServiceWithFlag['finish'] = function() {
+                aCb();
+            };
+            iface.RemoveServiceWithFlag(aFlag);
+        });
     }
 }
 

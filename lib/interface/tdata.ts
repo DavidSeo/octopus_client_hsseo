@@ -103,6 +103,25 @@ module TDATA
         langCode: string;
     }
 
+    export interface TAntennaInfo {
+        uid : number;
+        satType : string;
+        satName : string;
+        antType : number;
+        extInfo : ArrayBuffer;
+    }
+
+    export function convert_antennainfo(aDBusData:any):TAntennaInfo {
+        var ret:TAntennaInfo = {
+            uid: aDBusData[0],
+            satType: aDBusData[1],
+            satName: aDBusData[2],
+            antType: aDBusData[3],
+            extInfo: aDBusData[4]
+        };
+        return ret;
+    }
+
     export function convert_service(aDBusData:any):TService {
         var ret:TService = {
             uid: aDBusData[0],
