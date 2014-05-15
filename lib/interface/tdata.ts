@@ -130,6 +130,35 @@ module TDATA
         parentalRating : number;
     }
 
+    export interface TRecListData {
+        contentId : number;
+        url : string;
+        name : string;
+        thumbnailPath : string;
+        recStartTime : number;
+        recDuration : number;
+        recOrgDuration : number;
+        type : number;
+        recStatus : number;
+        recEndReason : number;
+    }
+
+    export function convert_reclistdata(aDBusData:any):TRecListData {
+        var ret:TRecListData = {
+            contentId : aDBusData[0],
+            url : aDBusData[1],
+            name : aDBusData[2],
+            thumbnailPath : aDBusData[3],
+            recStartTime : aDBusData[4],
+            recDuration : aDBusData[5],
+            recOrgDuration : aDBusData[6],
+            type : aDBusData[7],
+            recStatus : aDBusData[8],
+            recEndReason : aDBusData[9]
+        };
+        return ret;
+    }
+
     export function convert_event(aDBusData:any):TEvent {
         var ret:TEvent = {
             type : aDBusData[0][0],
