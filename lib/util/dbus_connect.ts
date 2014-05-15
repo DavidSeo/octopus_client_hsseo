@@ -14,7 +14,7 @@ export class CDBusInterface {
     private _dbusHandle;
     private _Destination;
     private _Path;
-
+    private _eventTimer;
     constructor(aDestination: string, aPath: string) {
         var dbusClass = new newdbus();
         var dbusHandle = dbusClass.getBus('open', sAddress);
@@ -28,6 +28,12 @@ export class CDBusInterface {
     _call(aCb: Function) {
         this._dbusHandle.getInterface(this._Destination, this._Path, this._Destination, function (err, iface) {
             aCb(iface);
+        });
+    }
+
+    _startEvent(aCb: Function) {
+        this._dbusHandle.getInterface(this._Destination, this._Path, this._Destination, function (err, iface) {
+            this._eventTimer = setTimeout(function() {aCb(iface);}, 1000);
         });
     }
 }
