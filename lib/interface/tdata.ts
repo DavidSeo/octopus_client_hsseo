@@ -143,6 +143,51 @@ module TDATA
         recEndReason : number;
     }
 
+    export interface TSchedule {
+        slot : number;
+        rsvType : number;
+        svcUid : number;
+        onid : number;
+        tsid : number;
+        svcid : number;
+        rsvReady : number;
+        startTime : number;
+        duration : number;
+        repeat : number;
+        repeatDays : number;
+        status : number;
+        exceptConflict : number;
+        epgType : number;
+        scheduleSpec : number;
+        removed : number;
+        remevedReason : number;
+        detailInfo : number;
+    }
+
+    export function convert_schedule(aDBusData:any):TSchedule {
+        var ret:TSchedule = {
+            slot : aDBusData[0][0],
+            rsvType : aDBusData[0][1],
+            svcUid : aDBusData[0][2],
+            onid : aDBusData[0][3][0],
+            tsid : aDBusData[0][3][1],
+            svcid : aDBusData[0][3][2],
+            rsvReady : aDBusData[0][4],
+            startTime : aDBusData[0][5],
+            duration : aDBusData[0][6],
+            repeat : aDBusData[0][7],
+            repeatDays : aDBusData[0][8],
+            status : aDBusData[0][9],
+            exceptConflict : aDBusData[0][10],
+            epgType : aDBusData[0][11],
+            scheduleSpec : aDBusData[1][0],
+            removed : aDBusData[2][0],
+            remevedReason : aDBusData[3][0],
+            detailInfo : aDBusData[3][1]
+        };
+        return ret;
+    }
+
     export function convert_reclistdata(aDBusData:any):TRecListData {
         var ret:TRecListData = {
             contentId : aDBusData[0],
