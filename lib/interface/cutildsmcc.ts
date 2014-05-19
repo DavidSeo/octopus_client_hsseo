@@ -27,12 +27,12 @@ class CUtilDsmcc extends dbusConn.CDBusInterface {
             iface.Create['finish'] = function (aHandle: number, aCachePath: string) {
                 aCb(aHandle, aCachePath);
             };
-            iface.CreateaType);
+            iface.Createa(aType);
         });
     }
 
     Destroy(aHandle: number, aCb:() => void) {
-        this._call(function (iface) {l
+        this._call(function (iface) {
             iface.Destroy['finish'] = function () {
                 aCb();
             };
