@@ -244,6 +244,59 @@ module TDATA
         isMounted : number;
     }
 
+    export interface TCASMMIEvent {
+        eventType : number;
+        session : number;
+        sessionType : number;
+        module : number;
+        slot : number;
+        encodeUiEvent : string;
+    }
+
+    export interface TDMSInfo {
+        title : string;
+        UDN : string;
+        IP : string;
+        deviceHandle : number;
+        macAddress : string;
+        totalStroageSize : string;
+        isSupportSrs : number;
+        sortCapNum : number;
+        searchCapNum : number;
+        dlnaCapNum : number;
+        JLabsCapNum : number;
+
+    }
+
+    export function convert_dmsinfo(aDBusData:any):TDMSInfo {
+        var ret:TDMSInfo = {
+            title : aDBusData[0],
+            UDN : aDBusData[1],
+            IP : aDBusData[2],
+            deviceHandle : aDBusData[3],
+            macAddress : aDBusData[4],
+            totalStroageSize : aDBusData[5],
+            isSupportSrs : aDBusData[6],
+            sortCapNum : aDBusData[7],
+            searchCapNum : aDBusData[8],
+            dlnaCapNum : aDBusData[9],
+            JLabsCapNum : aDBusData[10]
+        };
+        return ret;
+    }
+
+    export function convert_casmmievent(aDBusData:any):TCASMMIEvent {
+        var ret:TCASMMIEvent = {
+            eventType : aDBusData[0],
+            session : aDBusData[1],
+            sessionType : aDBusData[2],
+            module : aDBusData[3],
+            slot : aDBusData[4],
+            encodeUiEvent : aDBusData[5]
+        };
+        return ret;
+    }
+
     export function convert_ftpshared(aDBusData:any):TFTPShared {
         var ret:TFTPShared = {
             name : aDBusData[0],
