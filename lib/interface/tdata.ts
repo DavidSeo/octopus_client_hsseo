@@ -164,6 +164,154 @@ module TDATA
         detailInfo : number;
     }
 
+    export interface TTunerParamSat {
+        deliveryType : number;
+        tunerGroupId : number;
+        rfInputId : number;
+        antennaType : number;
+        frequency : number;
+        symbolrate : number;
+        feccoderate : number;
+        polarization : number;
+        transSpec : number;
+        pskMod : number;
+        pilot : number;
+        rolloff : number;
+        satType : string;
+        antuid : number;
+    }
+
+    export interface TTunerParamTer {
+        deliveryType : number;
+        tunerGroupId : number;
+        frequency : number;
+        bandWidth : number;
+        constellation : number;
+        hierachy : number;
+        codeRate : number;
+        transMode : number;
+        guardInterval : number;
+        stream : number;
+        offset : number;
+        system : number;
+    }
+
+    export interface TTunerParamCab {
+        deliveryType : number;
+        tunerGroupId : number;
+        frequency : number;
+        symbolRate : number;
+        constellation : number;
+        spectrum : number;
+        tsId : number;
+        netId : number;
+    }
+
+    export interface TCarouselItem {
+        carouselId : number;
+    }
+
+    export interface TBTDeviceinfo {
+        devId : number;
+        devName : string;
+        status : number;
+        devClass : string;
+        supportedProfie : number;
+        address : string;
+    }
+
+    export interface TNetDevinfo {
+        type : number;
+        isConnected : number;
+        isNetActive : number;
+        isRunning : number;
+        macAddr : string;
+        devName : string;
+    }
+
+    export function convert_netdevinfo(aDBusData:any):TNetDevinfo {
+        var ret:TNetDevinfo = {
+            type : aDBusData[0],
+            isConnected : aDBusData[1],
+            isNetActive : aDBusData[2],
+            isRunning : aDBusData[3],
+            macAddr : aDBusData[4],
+            devName : aDBusData[5]
+        };
+        return ret;
+    }
+
+    export function convert_btdeviceinfo(aDBusData:any):TBTDeviceinfo {
+        var ret:TBTDeviceinfo = {
+            devId : aDBusData[0],
+            devName : aDBusData[1],
+            status : aDBusData[2],
+            devClass : aDBusData[3],
+            supportedProfie : aDBusData[4],
+            address : aDBusData[5]
+        };
+        return ret;
+    }
+
+    export function convert_carouselitem(aDBusData:any):TCarouselItem {
+        var ret:TCarouselItem = {
+            carouselId : aDBusData[0]
+        };
+        return ret;
+    }
+
+    export function convert_tunerparam_cab(aDBusData:any):TTunerParamCab {
+        var ret:TTunerParamCab = {
+            deliveryType : aDBusData[0],
+            tunerGroupId : aDBusData[1],
+            frequency : aDBusData[2],
+            symbolRate : aDBusData[3],
+            constellation : aDBusData[4],
+            spectrum : aDBusData[5],
+            tsId : aDBusData[6],
+            netId : aDBusData[7]
+        };
+        return ret;
+    }
+
+    export function convert_tunerparam_ter(aDBusData:any):TTunerParamTer {
+        var ret:TTunerParamTer = {
+            deliveryType : aDBusData[0],
+            tunerGroupId : aDBusData[1],
+            frequency : aDBusData[2],
+            bandWidth : aDBusData[3],
+            constellation : aDBusData[4],
+            hierachy : aDBusData[5],
+            codeRate : aDBusData[6],
+            transMode : aDBusData[7],
+            guardInterval : aDBusData[8],
+            stream : aDBusData[9],
+            offset : aDBusData[10],
+            system : aDBusData[11]
+        };
+        return ret;
+    }
+
+    export function convert_tunerparam_sat(aDBusData:any):TTunerParamSat {
+        var ret:TTunerParamSat = {
+            deliveryType : aDBusData[0],
+            tunerGroupId : aDBusData[1],
+            rfInputId : aDBusData[2],
+            antennaType : aDBusData[3],
+            frequency : aDBusData[4],
+            symbolrate : aDBusData[5],
+            feccoderate : aDBusData[6],
+            polarization : aDBusData[7],
+            transSpec : aDBusData[8],
+            pskMod : aDBusData[9],
+            pilot : aDBusData[10],
+            rolloff : aDBusData[11],
+            satType : aDBusData[12],
+            antuid : aDBusData[13]
+        };
+        return ret;
+    }
+
     export function convert_schedule(aDBusData:any):TSchedule {
         var ret:TSchedule = {
             slot : aDBusData[0][0],
