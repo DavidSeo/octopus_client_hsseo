@@ -229,6 +229,42 @@ module TDATA
         devName : string;
     }
 
+    export interface TFTPServerInfo {
+        isStarted : number;
+        clientCount : number;
+        serverName : string;
+        port : number;
+    }
+
+    export interface TFTPShared {
+        name : string;
+        path : string;
+        state : number;
+        isWritable : number;
+        isMounted : number;
+    }
+
+    export function convert_ftpshared(aDBusData:any):TFTPShared {
+        var ret:TFTPShared = {
+            name : aDBusData[0],
+            path : aDBusData[1],
+            state : aDBusData[2],
+            isWritable : aDBusData[3],
+            isMounted : aDBusData[4]
+        };
+        return ret;
+    }
+
+    export function convert_ftpserverinfo(aDBusData:any):TFTPServerInfo {
+        var ret:TFTPServerInfo = {
+            isStarted : aDBusData[0],
+            clientCount : aDBusData[1],
+            serverName : aDBusData[2],
+            port : aDBusData[3]
+        };
+        return ret;
+    }
+
     export function convert_netdevinfo(aDBusData:any):TNetDevinfo {
         var ret:TNetDevinfo = {
             type : aDBusData[0],
