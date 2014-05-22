@@ -38,17 +38,9 @@ class CDlnaUtil extends dbusConn.CDBusInterface {
         });
     }
 
-    StartDMREvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number) => void) {
-        this._call( function (iface){
-            iface.on('dmr_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
-                aCb(msgInt, msgStr, param1, param2);
-            });
-        });
-    }
-
     StartDIALEvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number) => void) {
         this._call( function (iface){
-            iface.on('dmr_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
+            iface.on('dial_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
                 aCb(msgInt, msgStr, param1, param2);
             });
         });
@@ -56,7 +48,7 @@ class CDlnaUtil extends dbusConn.CDBusInterface {
 
     StartWSEvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number) => void) {
         this._call( function (iface){
-            iface.on('dmr_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
+            iface.on('ws_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
                 aCb(msgInt, msgStr, param1, param2);
             });
         });
@@ -64,15 +56,15 @@ class CDlnaUtil extends dbusConn.CDBusInterface {
 
     StartSATIPEvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number) => void) {
         this._call( function (iface){
-            iface.on('dmr_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
+            iface.on('satip_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
                 aCb(msgInt, msgStr, param1, param2);
             });
         });
     }
 
-    StartDLANRUISEvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number) => void) {
+    StartDLNARUISEvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number) => void) {
         this._call( function (iface){
-            iface.on('dmr_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
+            iface.on('dlnaruis_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
                 aCb(msgInt, msgStr, param1, param2);
             });
         });
@@ -80,7 +72,7 @@ class CDlnaUtil extends dbusConn.CDBusInterface {
 
     StartOBAMAEvent(aCb: (msgInt: number, msgStr: string, param1: number, param2: number) => void) {
         this._call( function (iface){
-            iface.on('dmr_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
+            iface.on('obama_event', function(msgInt: number, msgStr: string, param1: number, param2: number) {
                 aCb(msgInt, msgStr, param1, param2);
             });
         });

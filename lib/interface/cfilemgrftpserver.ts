@@ -58,12 +58,12 @@ class CFilemgrFtpserver extends dbusConn.CDBusInterface {
         });
     }
 
-    SetConfig(aUserName: string, aCurrentPassword: string, aNewPassword: string, aCb: (aReval: number) => void) {
+    SetPassword(aUserName: string, aCurrentPassword: string, aNewPassword: string, aCb: (aReval: number) => void) {
         this._call( function (iface){
-            iface.SetConfig['finish'] = function(aReval: number) {
+            iface.SetPassword['finish'] = function(aReval: number) {
                 aCb(aReval);
             };
-            iface.SetConfig((aUserName, aCurrentPassword, aNewPassword));
+            iface.SetPassword((aUserName, aCurrentPassword, aNewPassword));
         });
     }
 
