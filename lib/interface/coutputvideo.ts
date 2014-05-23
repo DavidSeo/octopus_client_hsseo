@@ -205,8 +205,8 @@ class COutputVideo extends dbusConn.CDBusInterface {
 
     GetBackGroundColor(aCb: (aRed: number, aGreen: number, aBlue: number) => void) {
         this._call( function (iface){
-            iface.GetBackGroundColor['finish'] = function(aRed: number, aGreen: number, aBlue: number) {
-                aCb(aRed, aGreen, aBlue);
+            iface.GetBackGroundColor['finish'] = function(data) {
+                aCb(data[0], data[1], data[2]);
             };
             iface.GetBackGroundColor();
         });

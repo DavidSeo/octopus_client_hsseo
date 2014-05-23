@@ -109,8 +109,8 @@ class CUtilBuilder extends dbusConn.CDBusInterface {
 
     GetBuilderStatus(aBuilderHandle: number, aCb: (aTotalTuningNum: number, aCompleteTuningNum: number, aSearchedTuningNum: number, aSearchState: number, aFrequency: number, aDeliveryType: number, aTunerParam: number) => void) {
         this._call( function (iface){
-            iface.GetBuilderStatus['finish'] = function(aTotalTuningNum: number, aCompleteTuningNum: number, aSearchedTuningNum: number, aSearchState: number, aFrequency: number, aDeliveryType: number, aTunerParam: number) {
-                aCb(aTotalTuningNum, aCompleteTuningNum, aSearchedTuningNum, aSearchState, aFrequency, aDeliveryType, aTunerParam);
+            iface.GetBuilderStatus['finish'] = function(data) {
+                aCb(data[0], data[1], data[2], data[3], data[4], data[5], data[6]);
             };
             iface.GetBuilderStatus(aBuilderHandle);
         });
@@ -118,8 +118,8 @@ class CUtilBuilder extends dbusConn.CDBusInterface {
 
     GetBuilderSignalStatus(aBuilderHandle: number, aCb: (aSignalStrength: number, aSignalQuality: number) => void) {
         this._call( function (iface){
-            iface.GetBuilderSignalStatus['finish'] = function(aSignalStrength: number, aSignalQuality: number) {
-                aCb(aSignalStrength, aSignalQuality);
+            iface.GetBuilderSignalStatus['finish'] = function(data) {
+                aCb(data[0], data[1]);
             };
             iface.GetBuilderSignalStatus(aBuilderHandle);
         });

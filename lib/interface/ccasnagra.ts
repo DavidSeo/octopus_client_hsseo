@@ -78,8 +78,8 @@ class CCasNagra extends dbusConn.CDBusInterface {
 
     GetFusingInfo(aCb: (aScs: number, aJtag: number, aOtp: number, aCwe: number) => void) {
         this._call( function (iface){
-            iface.GetFusingInfo['finish'] = function(aScs: number, aJtag: number, aOtp: number, aCwe: number) {
-                aCb(aScs, aJtag, aOtp, aCwe);
+            iface.GetFusingInfo['finish'] = function(data) {
+                aCb(data[0], data[1], data[2], data[3]);
             };
             iface.GetFusingInfo();
         });
@@ -105,19 +105,19 @@ class CCasNagra extends dbusConn.CDBusInterface {
 
     GetAccessibleState(aCb: (aAccessState: number, aRemainTime: number, aRetryCount: number, aIsOk: number) => void) {
         this._call( function (iface){
-            iface.GetAccessibleState['finish'] = function(aAccessState: number, aRemainTime: number, aRetryCount: number, aIsOk: number) {
-                aCb(aAccessState, aRemainTime, aRetryCount, aIsOk);
+            iface.GetAccessibleState['finish'] = function(data) {
+                aCb(data[0], data[1], data[2], data[3]);
             };
             iface.GetAccessibleState();
         });
     }
 
-    VerifyPincodeGetAccessibleState(aCb: (aAccessState: number, aRemainTime: number, aRetryCount: number, aPinStr: string, aIsOk: number) => void) {
+    VerifyPincodeGetAccessibleState(aPinStr: string, aCb: (aAccessState: number, aRemainTime: number, aRetryCount: number, aIsOk: number) => void) {
         this._call( function (iface){
-            iface.VerifyPincodeGetAccessibleState['finish'] = function(aAccessState: number, aRemainTime: number, aRetryCount: number, aPinStr: string, aIsOk: number) {
-                aCb(aAccessState, aRemainTime, aRetryCount, aPinStr, aIsOk);
+            iface.VerifyPincodeGetAccessibleState['finish'] = function(data) {
+                aCb(data[0], data[1], data[2], data[3]);
             };
-            iface.VerifyPincodeGetAccessibleState();
+            iface.VerifyPincodeGetAccessibleState(aPinStr);
         });
     }
 

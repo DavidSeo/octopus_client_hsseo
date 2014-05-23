@@ -2,27 +2,36 @@
  * Created by hsseo on 14. 5. 12.
  */
 
-/*
- reval._1 		=	(int32_t)pstSrc->uid;
- reval._2 		=	(int32_t)pstSrc->tsuid;
- reval._3 		=	(int32_t)pstSrc->prvuid;
- reval._4 		=	(int32_t)pstSrc->antuid;
-
- reval._5 		=	(int32_t)pstSrc->svcid;
- reval._6 		=	(int32_t)pstSrc->tsid;
- reval._7 		=	(int32_t)pstSrc->onid;
-
- reval._8 		=	(int32_t)pstSrc->lcn;
-
- reval._9 		=	(uint32_t)pstSrc->svcType;
- reval._10 		=	(uint32_t)pstSrc->deliType;
- reval._11 		=	(uint32_t)pstSrc->casType;
-
- reval._12 		=	std::string(pstSrc->name);
- reval._13 		=	std::string(pstSrc->satType);
- */
 module TDATA
 {
+    export interface TStartInfoLive {
+        liveType : number;
+        masterSvcUid : number;
+        suppleSvcUid : number;
+        suppSvcType : number;
+        majorCHNum : number;
+    }
+
+    export interface TStartInfoPvrPb {
+        contentId : number;
+        startTime : number;
+    }
+
+    export interface TStartInfoTsrPb {
+        masterSvcUid : number;
+        suppleSvcUid : number;
+        suppSvcType : number;
+        startTime : number;
+    }
+
+    export interface TStartInfoMediaPlay {
+        videoCodec : number;
+        audioCodec : number;
+        videoPid : number;
+        audioPid : number;
+        startTime : number;
+        url : string;
+    }
 
     export interface TService {
         uid: number;

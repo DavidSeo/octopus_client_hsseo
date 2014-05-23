@@ -205,8 +205,8 @@ class CSysinfoStb extends dbusConn.CDBusInterface {
 
     GetNandBadBlocks(aCb: (aCntLdr: number, aCntUBI: number, aCntUBIFS: number) => void) {
         this._call( function (iface){
-            iface.GetNandBadBlocks['finish'] = function(aCntLdr: number, aCntUBI: number, aCntUBIFS: number) {
-                aCb(aCntLdr, aCntUBI, aCntUBIFS);
+            iface.GetNandBadBlocks['finish'] = function(data) {
+                aCb(data[0], data[1], data[2]);
             };
             iface.GetNandBadBlocks();
         });
@@ -214,8 +214,8 @@ class CSysinfoStb extends dbusConn.CDBusInterface {
 
     GetFusingInfo(aCb: (aScs: number, aJtag: number, aOtp: number, aCwe: number) => void) {
         this._call( function (iface){
-            iface.GetFusingInfo['finish'] = function(aScs: number, aJtag: number, aOtp: number, aCwe: number) {
-                aCb(aScs, aJtag, aOtp, aCwe);
+            iface.GetFusingInfo['finish'] = function(data) {
+                aCb(data[0], data[1], data[2], data[3]);
             };
             iface.GetFusingInfo();
         });

@@ -186,7 +186,7 @@ class CMediaPlay extends dbusConn.CDBusInterface {
         });
     }
 
-    StartLive(aViewId: number, aStartInfo: ArrayBuffer, aCb: (aSessionId: number) => void) {
+    StartLive(aViewId: number, aStartInfo: tdata.TStartInfoLive, aCb: (aSessionId: number) => void) {
         this._call( function (iface){
             iface.StartLive['finish'] = function(aSessionId: number) {
                 aCb(aSessionId);
@@ -195,7 +195,8 @@ class CMediaPlay extends dbusConn.CDBusInterface {
         });
     }
 
-    StartPvrPb(aViewId: number, aStartInfo: ArrayBuffer, aCb: (aSessionId: number) => void) {
+
+    StartPvrPb(aViewId: number, aStartInfo: tdata.TStartInfoPvrPb, aCb: (aSessionId: number) => void) {
         this._call( function (iface){
             iface.StartPvrPb['finish'] = function(aSessionId: number) {
                 aCb(aSessionId);
@@ -204,7 +205,7 @@ class CMediaPlay extends dbusConn.CDBusInterface {
         });
     }
 
-    StartTsrPb(aViewId: number, aStartInfo: ArrayBuffer, aCb: (aSessionId: number) => void) {
+    StartTsrPb(aViewId: number, aStartInfo: tdata.TStartInfoTsrPb, aCb: (aSessionId: number) => void) {
         this._call( function (iface){
             iface.StartTsrPb['finish'] = function(aSessionId: number) {
                 aCb(aSessionId);
@@ -213,7 +214,7 @@ class CMediaPlay extends dbusConn.CDBusInterface {
         });
     }
 
-    StartMedia(aViewId: number, aStartInfo: ArrayBuffer, aCb: (aSessionId: number) => void) {
+    StartMedia(aViewId: number, aStartInfo: tdata.TStartInfoMediaPlay, aCb: (aSessionId: number) => void) {
         this._call( function (iface){
             iface.StartMedia['finish'] = function(aSessionId: number) {
                 aCb(aSessionId);

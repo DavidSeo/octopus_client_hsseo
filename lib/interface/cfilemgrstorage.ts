@@ -109,8 +109,8 @@ class CFilemgrStorage extends dbusConn.CDBusInterface {
 
     GetSize(aDeviceId: number, aCb: (aTotalKb: number, aAvailableKb: number, aUsedKb: number, aReservedKb: number, aAvailablePvrKb: number) => void) {
         this._call( function (iface){
-            iface.GetSize['finish'] = function(aTotalKb: number, aAvailableKb: number, aUsedKb: number, aReservedKb: number, aAvailablePvrKb: number) {
-                aCb(aTotalKb,aAvailableKb,aUsedKb,aReservedKb,aAvailablePvrKb);
+            iface.GetSize['finish'] = function(data) {
+                aCb(data[0], data[1], data[2], data[3], data[4]);
             };
             iface.GetSize(aDeviceId);
         });
