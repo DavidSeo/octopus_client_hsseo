@@ -84,7 +84,7 @@ class CMetaService extends dbusConn.CDBusInterface {
     GetServiceTriplet(aUid: number, aCb: (aTsid: number, aOnid: number, aSid: number) => void) {
         this._call( function (iface){
             iface.GetServiceTriplet['finish'] = function(data) {
-                aCb(data[0], data[1], data[2], data[3]);
+                aCb(data[0], data[1], data[2]);
             };
             iface.GetServiceTriplet(aUid);
         });
